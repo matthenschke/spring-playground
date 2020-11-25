@@ -29,7 +29,7 @@ public class PersonController {
     @PostMapping
     public ResponseEntity<Person> addPerson(@Valid @NotNull @RequestBody Person person){
         Person newPerson = personService.addPerson(person);
-        return new ResponseEntity<>(newPerson, HttpStatus.OK);
+        return new ResponseEntity<>(newPerson, HttpStatus.CREATED);
     }
     @GetMapping
     public ResponseEntity<List<Person>> getPeople(){
@@ -37,16 +37,25 @@ public class PersonController {
     }
     @GetMapping(path = "{id}")
     public ResponseEntity<Person> getPersonById(@PathVariable UUID id){
-        return new ResponseEntity<>(personService.getPersonById(id).orElse(null), HttpStatus.OK);
+        Person p = personService.getPersonById(id).orElse(null);
+        if (p == null)
+            return new ResponseEntity<Person>(p, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(p, HttpStatus.OK);
     }
     @DeleteMapping(path = "{id}")
-    public ResponseEntity<Person> deletePersonById(@PathVariable UUID id){
-        return new ResponseEntity<>(personService.deletePersonById(id).orElse(null), HttpStatus.OK);
+    public ResponseEntity<Person> deletePersonById(@PathVariable UUID id) {
+        Person p = personService.deletePersonById(id).orElse(null);
+        if (p == null)
+            return new ResponseEntity<Person>(p, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(p, HttpStatus.OK);
     }
 
     @PutMapping(path = "{id}")
     public ResponseEntity<Person> updatePerson(@PathVariable UUID id, @Valid @NotNull @RequestBody Person person){
-        return new ResponseEntity<>(personService.updatePerson(id, person).orElse(null), HttpStatus.OK);
+        Person p = personService.updatePerson(id, person).orElse(null);
+        if (p == null)
+            return new ResponseEntity<Person>(p, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(p, HttpStatus.OK);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
