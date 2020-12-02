@@ -29,7 +29,7 @@ public class PersonController {
     @PostMapping
     public ResponseEntity<Person> addPerson(@Valid @NotNull @RequestBody Person person){
         Person newPerson = personService.addPerson(person);
-        return new ResponseEntity<>(newPerson, HttpStatus.CREATED);
+        return new ResponseEntity<Person>(newPerson, HttpStatus.CREATED);
     }
     @GetMapping
     public ResponseEntity<List<Person>> getPeople(){
